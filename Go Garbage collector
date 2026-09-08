@@ -1,0 +1,20 @@
+ Go language takes responsibility for arranging the storage of Go values
+- These values often need to be stored in computer **physical memory** and physical memory is a finite resource
+- Memory must be managed carefully and recycled in order to avoid running out of it while executing a Go program
+- Automatically recycling memory is **garbage collection**
+- Go runtime(which is part of go build(apart from go code and libraries)) contains GOGC
+- Go values(pointer and non-pointer) will be allocated in stack if it's lexical scope is terminated after the function exits, otherwise it is escape to heap memory(Escape Analysis)
+- The act of allocating memory on the heap is typically referred to as "**dynamic memory allocation**" because both the compiler and the runtime can make very few assumptions as to how this memory is used and when it can be cleaned up
+- Go has a **tracing garbage** collection
+- Object and Pointer form **Object Graph**
+- GC walks through this object graph from program roots, this process is called **Scanning**
+- While scanning, GOGC marks all values that are alive and then walks through heap to eliminate unmarked values(sweeping)
+- This is called as mark-sweep technique
+- GC Cycle has phases:
+	- sweeping
+	- off
+	- marking
+-  **Go's GC trades CPU time for memory.**
+	- Run GC more often → use **less memory**, but **more CPU**
+	- Run GC less often → use **more memory**, but **less CPU**
+	- **`GOGC = 100` is the default setting. It causes Go to target a GC when the newly allocated heap since the previous GC is roughly 100% of the previous live heap.**
