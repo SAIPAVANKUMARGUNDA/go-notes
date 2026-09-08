@@ -1,0 +1,100 @@
+A goroutine is a lightweight thread managed by the Go runtime.
+
+`go func() {`
+    `fmt.Println("hello")`
+`}()`
+
+| Feature       | Goroutine         | OS Thread |
+| ------------- | ----------------- | --------- |
+| Managed by    | Go runtime        | OS        |
+| Stack size    | ~2KB initial      | MBs       |
+| Creation cost | Very cheap        | Expensive |
+| Count         | Millions possible | Thousands |
+Go uses **M:N scheduling**:
+- Many goroutines mapped onto fewer OS threads.
+
+**Go Scheduler**
+- The **Go scheduler is part of the Go runtime**. It's a collection of code and data structures inside every Go program that decides **which goroutine runs on which OS thread**
+- Scheduler = algorithms + queues + runtime functions
+- It keeps track of:
+	- all goroutines (G)
+	- all OS threads (M)
+	- all processors (P)
+	- which goroutines are runnable
+	- which are blocked
+	- which OS threads are idle
+
+**GMP Model**
+The **GMP model** is the core of Go's scheduler. It explains **how goroutines are executed efficiently on OS threads**.
+
+GMP MODEL
+
+G = Goroutine
+- Lightweight unit of execution
+- Contains stack, program counter, etc.
+- Many Gs can exist
+- States: runnable, running, waiting/blocked
+
+M = Machine
+- Represents an OS thread
+- Executes Go code
+- Needs a P to execute a G
+- Number of Ms is NOT limited by GOMAXPROCS
+
+P = Processor
+- Logical scheduler resource
+- GOMAXPROCS determines number of Ps
+- Has a local run queue of runnable Gs
+- Required by M to execute Go code
+
+Scheduler
+- Selects runnable Gs and executes them on Ms
+- Prefers P's local run queue
+- Global run queue also contains runnable Gs
+- Idle P can steal Gs from another P
+- Can preempt long-running Gs
+
+Global Run Queue
+- Shared queue of runnable Gs
+- Used when runtime cannot/shouldn't keep work
+  only in local queues
+- Local queues may offload work to it
+- Ps can obtain work from it
+
+Work Stealing
+- If P has insufficient work
+- It can steal runnable Gs from another P's local queue
+
+Blocking Syscall
+
+G1 → M1 → blocking syscall
+
+M1 blocks
+P1 is detached from M1
+Another M can acquire P1
+Other Gs continue executing
+
+Network I/O
+- Go runtime uses network poller
+- G can wait for I/O without unnecessarily
+  blocking an OS thread
+
+IMPORTANT
+
+GOMAXPROCS = maximum number of Ps that can
+execute Go code simultaneously
+
+GOMAXPROCS ≠ number of OS threads
+
+M needs P to execute Go code
+
+**Channels**
+A channel in go is used for communication and synchronization between go routines
+
+`ch := make(chan int)`
+`go func() {`
+    `ch <- 10`
+`}()`
+`value := <-ch`
+`fmt.Println(value)`
+
