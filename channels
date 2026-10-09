@@ -23,3 +23,20 @@ Directional channels
 - <-chan int (Receive only)
 - Go channels are bidirectional by default,
   but we can use directional channel types—chan<- for send-only and <-chan for receive-only—to clearly define producer and consumer responsibilities.
+
+Closing channels
+ - close(ch)
+ - when you try to read from a closed channel, it gives default values of that type
+ - when you try to send to a closed channel, it throws panic
+ - In buffered channel, when closed can be read untill buffer is empty
+ - A receive from a closed channel does not block.
+ - The sender should normally close the channel, not the receiver,
+   Because the consumer doesn't necessarily know whether another sender still intends to send.
+ - for value := range ch {
+    fmt.Println(value)
+    }
+ - channel is closed
+        +
+   channel buffer is drained
+        ↓
+    range terminates
