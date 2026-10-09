@@ -1,1 +1,18 @@
+A Go runtime is the part of the Go system that is automatically included in your Go program and manages the program while it is running.
 
+Think of it as:
+
+Your Go code + Go runtime + OS
+
+What does the Go runtime actually do?
+
+The runtime handles things that your application shouldn't have to manage manually:
+
+Goroutines
+  - Creates and manages goroutines.
+  - Schedules goroutines onto OS threads.
+  - Implements the GMP scheduler (G, M, P).
+Garbage Collection
+  - Finds objects that are no longer reachable.
+  - Reclaims heap memory.
+  - Controlled partly through settings like GOGC.
