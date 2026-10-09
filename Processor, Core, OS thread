@@ -1,0 +1,14 @@
+Processor, Core, OS thread
+- A **hardware processor** is the **physical electronic chip** (the CPU) that performs computations by executing machine instructions.
+- Processor can have one/multiple cores
+- Each core execute one thread at a time
+- Each core can execute 2 thread at a time using Hyper-Threading (Intel) or SMT(Simultaneous Multithreading) (AMD)
+
+# When does Go switch?
+Go may switch goroutines when:
+
+- A goroutine blocks on a channel.
+- A goroutine performs a blocking system call.
+- A goroutine waits on a mutex.
+- A goroutine calls `time.Sleep()`.
+- The runtime **preempts** a goroutine that has been running for "too long."
