@@ -1,1 +1,25 @@
+A channel is a typed communication mechanism between goroutines.
 
+ch := make(chan int)
+
+ch <- 10       // send
+x := <-ch      // receive
+close(ch)      // close
+
+Unbuffered channels
+An unbuffered channel provides direct synchronization between sender and receiver.
+The send blocks until a receiver is ready, and the receive blocks until a sender is ready.
+
+Buffered channels
+ch := make(chan int, 3)
+- capacity is 3
+
+- Receiver gets blocked if the channel buffer is empty and no sender can provide a value.
+- Sender gets blocked if the channel buffer is full and no receiver frees up space.
+
+Directional channels
+- chan int (Bi-directional)
+- chan<- int (Send only)
+- <-chan int (Receive only)
+- Go channels are bidirectional by default,
+  but we can use directional channel types—chan<- for send-only and <-chan for receive-only—to clearly define producer and consumer responsibilities.
