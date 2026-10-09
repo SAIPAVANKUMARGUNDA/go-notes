@@ -16,3 +16,6 @@ Garbage Collection
   - Finds objects that are no longer reachable.
   - Reclaims heap memory.
   - Controlled partly through settings like GOGC.
+Channels
+  - Implements the internal mechanics of Go channels.
+  - Handles synchronization between goroutines.
