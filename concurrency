@@ -1,0 +1,5 @@
+- Concurrency means your program **can make progress on multiple tasks by switching between them**, even if only one CPU core is available.
+- Parallelism means **multiple tasks are literally executing simultaneously**.
+- Parallelism is typically considered a subset of concurrency.
+- `GOMAXPROCS` controls how many OS threads can execute Go code simultaneously.
+- GOMAXPROCS = 4 (4 tasks can be assigned to 4 OS threads)
