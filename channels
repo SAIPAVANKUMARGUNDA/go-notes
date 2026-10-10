@@ -40,7 +40,30 @@ Closing channels
    channel buffer is drained
         ↓
     range terminates
+ - Closing a channel releases blocked receivers, but it does NOT safely release blocked senders.
+
+Nil Channel
  - var ch chan int gives a nil channel
  - nil channel blocks forever while sending to it or receiving from it
  - select disables nil channel condition
  - panic happens when we try to close a nil channel
+
+Select
+select {
+case value := <-ch1:
+    fmt.Println(value)
+
+case value := <-ch2:
+    fmt.Println(value)
+}
+- The select waits until one of the communication operations can proceed.
+- If both are ready, Go chooses randomly among the ready cases.
+
+select {
+case value := <-ch:
+    fmt.Println(value)
+
+default:
+    fmt.Println("nothing available")
+}
+ - default statement here ensures that it is non-blocking
