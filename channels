@@ -67,3 +67,24 @@ default:
     fmt.Println("nothing available")
 }
  - default statement here ensures that it is non-blocking
+
+Program
+done := make(chan struct{})
+
+go func() {
+    doWork()
+    close(done)
+}()
+
+<-done
+ - A technique used as signal that certain work is done
+
+Deadlock
+ - Deadlock because the send happens before a receiver exists.
+
+ch := make(chan int)
+ch <- 10
+fmt.Println(<-ch)
+
+error:
+fatal error: all goroutines are asleep - deadlock!
