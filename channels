@@ -40,3 +40,7 @@ Closing channels
    channel buffer is drained
         ↓
     range terminates
+ - var ch chan int gives a nil channel
+ - nil channel blocks forever while sending to it or receiving from it
+ - select disables nil channel condition
+ - panic happens when we try to close a nil channel
