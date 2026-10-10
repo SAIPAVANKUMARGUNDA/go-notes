@@ -88,3 +88,39 @@ fmt.Println(<-ch)
 
 error:
 fatal error: all goroutines are asleep - deadlock!
+
+Deadlock involving buffered channels:
+ch := make(chan int, 2)
+ch <- 1
+ch <- 2
+ch <- 3
+
+ - Third send blocks because: there is no receiver and ccapacity is 2
+
+Backpressure: Learn in depth
+
+What is a channel?
+Buffered vs unbuffered channel?
+What happens when you send to a full buffered channel?
+What happens when you receive from an empty buffered channel?
+What happens when you receive from a closed channel?
+What happens when you send to a closed channel?
+What happens when you close a channel twice?
+What happens with a nil channel?
+Why does range ch require the channel to eventually close?
+Who should close a channel?
+Can multiple goroutines send to the same channel?
+How do you safely close a channel with multiple producers?
+What does select do?
+What happens if multiple select cases are ready?
+What is a non-blocking channel operation?
+How does select work with context.Done()?
+How can channels cause goroutine leaks?
+How can channels cause deadlocks?
+How would you implement a worker pool?
+Explain fan-in/fan-out.
+How does a buffered channel provide backpressure?
+Channel vs mutex?
+Channel vs WaitGroup?
+How do channels interact with the Go scheduler?
+How would you gracefully shut down workers using channels and context?
