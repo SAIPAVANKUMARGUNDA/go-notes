@@ -1,1 +1,12 @@
+Error
+ - In Go, an error is just an interface with a method which returns a string.
+ - errors.New("user not found"), for a fixed message
+ - fmt.Errorf("user %d not found", id), for a formatting an error message
+ - Do not ignore errors
 
+Error wrapping:
+ - fmt.Errorf("failed to get user: %w", err)
+ - %v → format error → string
+ - %w → wrap error → new error preserving original error, creates a wrapped error chain
+ - %w wraps an error while preserving the error chain, allowing errors.Is and errors.As to inspect the underlying errors. 
+   %v only formats the error into the message and does not preserve the wrapping relationship.
