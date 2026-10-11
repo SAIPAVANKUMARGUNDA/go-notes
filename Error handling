@@ -10,3 +10,32 @@ Error wrapping:
  - %w → wrap error → new error preserving original error, creates a wrapped error chain
  - %w wraps an error while preserving the error chain, allowing errors.Is and errors.As to inspect the underlying errors. 
    %v only formats the error into the message and does not preserve the wrapping relationship.
+
+Sentinel errors:
+ - A sentinel error is a predefined error value.
+ - var ErrNotFound = errors.New("not found")
+
+errors.Is():
+ - errors.Is is used to check whether an error or any error in its chain matches a target error
+ - errors.As is used to find and extract an error of a particular type from the error chain.
+
+Panic:
+ - Panic is Go's mechanism for handling unexpected conditions that prevent normal execution. 
+   It stops normal execution, runs deferred functions, and, if not recovered, terminates the program.
+ - If a critical dependency(db connection) fails during initialization and the application cannot function without it, panicking can be appropriate
+
+Recover:
+ - recover() allows you to catch a panic and regain control of the program.
+ - func test() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered:", r)
+        }
+    }()
+
+    panic("something went wrong")
+}
+ - recover() only works when called from a deferred function during panic unwinding.
+ - recover prevents an unrecovered panic from terminating the Go process. In an HTTP server,
+   we typically use recovery middleware so that a panic in one request is recovered, logged, and converted into an appropriate response,
+   allowing the process—and therefore normally the pod—to continue serving other requests.
