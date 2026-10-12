@@ -32,7 +32,7 @@ Interfaces
     3. Loose coupling: Business logic depends on an interface rather than a specific concrete type.
     4. Extensibility: New implementations can be added without modifying existing business logic.
     5. Testability: We can inject mock implementations to test business logic independently of real dependencies.
-
+----------------------------------------------------------------------------------------------------------------------
 Interface Internals:
 Conceptually, an interface value carries two pieces of information:
 1. Dynamic type — the concrete type currently stored.
@@ -42,4 +42,70 @@ var s Speaker = Dog{Name: "Bruno"}
  - Dog is Dynamic type stored
  - Dog{Name: "Bruno"} is Dynamic value stored
  - s.Speak(), then Dog's speak implementation is invoked and this is called as Dynamic Dispatch
+----------------------------------------------------------------------------------------------------------------------
+Empty interface — interface{} and any
+ - An empty interface has no methods: interface {}
+ - Since every Go type satisfies an interface that requires zero methods, an empty interface can hold values of any type.
+ - In Go 1.18 and later, any is an alias for interface{}
+ - var value any
+   value = 10
+   value = "hello"
+   value = true
+   value = []int{1, 2, 3}
+----------------------------------------------------------------------------------------------------------------------
+Type assertions:
+ - A type assertion extracts or verifies a concrete type stored inside an interface.
+ - var v any = "hello"
+   s := v.(string)
+   fmt.Println(s) // hello
+ - type Closer interface {
+       Close() error
+   }
+   
+   func CloseIfSupported(v any) error {
+       c, ok := v.(Closer)
+       if !ok {
+           return nil
+       }
+   
+       return c.Close()
+   }
+----------------------------------------------------------------------------------------------------------------------
+Type switches:
+A type switch is useful when you need different behavior for multiple possible dynamic types.
 
+func Describe(v any) {
+    switch x := v.(type) {
+    case string:
+        fmt.Println("String:", x)
+
+    case int:
+        fmt.Println("Integer:", x)
+
+    case bool:
+        fmt.Println("Boolean:", x)
+
+    default:
+        fmt.Printf("Unknown type: %T\n", x)
+    }
+}
+----------------------------------------------------------------------------------------------------------------------
+Interface composition:
+Interface composition means building a larger interface by combining smaller interfaces.
+type Reader interface {
+    Read() error
+}
+
+type Writer interface {
+    Write() error
+}
+
+type ReadWriter interface {
+    Reader
+    Writer
+}
+ - A concrete type satisfies it by implementing both methods:
+
+Why compose interfaces?
+ - Suppose a backend service needs to read from and write to a data store. Another component only needs read access.
+ - If you define one enormous interface containing every database operation, a read-only component must depend on methods it doesn't use.
