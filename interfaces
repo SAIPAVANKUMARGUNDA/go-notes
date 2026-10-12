@@ -33,19 +33,13 @@ Interfaces
     4. Extensibility: New implementations can be added without modifying existing business logic.
     5. Testability: We can inject mock implementations to test business logic independently of real dependencies.
 
-Pointer receivers vs Value receivers
- - In Go, methods can have either value receivers or pointer receivers.
+Interface Internals:
+Conceptually, an interface value carries two pieces of information:
+1. Dynamic type — the concrete type currently stored.
+2. Dynamic value — the concrete value currently stored.
 
- - A value receiver receives a copy of the struct, so modifications to the receiver's fields do not affect the original struct.
-   A pointer receiver receives a copy of a pointer to the original struct, 
-   allowing the method to modify the original state without copying the entire struct.
+var s Speaker = Dog{Name: "Bruno"}
+ - Dog is Dynamic type stored
+ - Dog{Name: "Bruno"} is Dynamic value stored
+ - s.Speak(), then Dog's speak implementation is invoked and this is called as Dynamic Dispatch
 
- - I prefer pointer receivers when a method needs to mutate state, when copying a large struct is undesirable,
-   or when the struct contains synchronization primitives such as a mutex. Value receivers are appropriate for small, 
-   value-like types when copy semantics are desirable.
-
- - An important distinction is method sets. A type `T` includes methods declared with value receivers,
-   whereas `*T` includes methods declared with both value and pointer receivers. 
-   This distinction affects interface implementation, even though Go can automatically take the address of an addressable value when calling a pointer-receiver method.
-
- - Finally, pointer receivers do not inherently mean heap allocation. Escape analysis determines whether a value escapes to the heap.
