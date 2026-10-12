@@ -1,1 +1,5 @@
-
+| Point | `new` | `make` |
+|---|---|---|
+| Purpose | Allocates zero-valued memory | Initializes slices, maps, and channels for use |
+| Return value | Returns a pointer (`*T`) | Returns a value of type `T` |
+| Supported types | Works with any type | Works only with slices, maps, and channels |
