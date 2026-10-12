@@ -1,0 +1,34 @@
+Interfaces
+
+ - An interface in Go is a type that defines a set of method signatures. 
+   Any concrete type that implements all those methods automatically satisfies the interface, without explicitly declaring that it implements it.
+   
+ - type PaymentProcessor interface {
+      Pay(amount float64)
+  }
+  type Razorpay struct{}
+
+  func (r Razorpay) Pay(amount float64) {
+      fmt.Println("Payment using Razorpay:", amount)
+  }
+  
+  type Stripe struct{}
+  
+  func (s Stripe) Pay(amount float64) {
+      fmt.Println("Payment using Stripe:", amount)
+  }
+
+  func main() {
+    razorpay := Razorpay{}
+    stripe := Stripe{}
+
+    ProcessPayment(razorpay, 1000)
+    ProcessPayment(stripe, 2000)
+}
+
+ - Why do we use interfaces?
+    1. Abstraction: The caller knows what a type can do without needing to know how it does it.
+    2. Polymorphism: Different concrete types can provide different implementations of the same behavior.
+    3. Loose coupling: Business logic depends on an interface rather than a specific concrete type.
+    4. Extensibility: New implementations can be added without modifying existing business logic.
+    5. Testability: We can inject mock implementations to test business logic independently of real dependencies.
