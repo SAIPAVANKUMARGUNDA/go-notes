@@ -3,3 +3,11 @@
 | Purpose | Allocates zero-valued memory | Initializes slices, maps, and channels for use |
 | Return value | Returns a pointer (`*T`) | Returns a value of type `T` |
 | Supported types | Works with any type | Works only with slices, maps, and channels |
+
+| Operation | Nil slice | Nil map | Nil channel |
+|---|---|---|---|
+| Read length (`len`) | Yes, returns `0` | Yes, returns `0` | Yes, returns `0` |
+| Read an element/key | Index access panics | Returns zero value | Blocks forever |
+| Add or send data | `append()` works | Assignment panics | Send blocks forever |
+| Iterate using `range` | Safe, zero iterations | Safe, zero iterations | Blocks waiting for a value |
+| Can use normally without `make`? | Partially, yes | No, not for writing | No, not for communication |
