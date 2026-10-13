@@ -1,3 +1,13 @@
 Context
  - In Go, context is used to propagate request-scoped information, deadlines, timeouts, and cancellation signals across API and goroutine boundaries.
  - The key idea is that context is not primarily for passing business data. Its most important purpose is controlling the lifetime of work.
+
+context.Context
+ - The context.Context type is an interface provided by Go's standard library.
+ - import "context"
+   type Context interface {
+       Deadline() (deadline time.Time, ok bool)
+       Done() <-chan struct{}
+       Err() error
+       Value(key any) any
+   }
