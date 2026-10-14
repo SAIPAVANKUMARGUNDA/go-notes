@@ -118,3 +118,13 @@ Timeouts:
 | Based on | A specific date and time | A duration from the current time |
 | Use case | When a common cutoff time already exists | When you want to limit how long an operation can take |
 | Example | Finish before 5:00 PM | Finish within 5 seconds |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Graceful shutdown in Go:
+ - Graceful shutdown means allowing an application to stop accepting new work while giving existing work a limited amount of time to finish.
+ - Imagine a Kubernetes pod running your Go API, When Kubernetes terminates the pod, you generally want to:
+   - Receive the shutdown signal.
+   - Stop accepting new requests.
+   - Allow in-flight requests to finish.
+   - Stop background workers.
+   - Close database connections and other resources.
+   - Exit before the termination grace period expires.
