@@ -11,3 +11,64 @@ context.Context
        Err() error
        Value(key any) any
    }
+ - Deadline() -> It returns two values: deadline: The exact date and time when the context expires, ok: A boolean indicating whether the context has a deadline.
+ - Deadline() only tells you when the context expires. It does not automatically stop your code when that time arrives.
+   Your code must cooperate with context cancellation, usually by checking ctx.Done() or passing the context to an API that supports it.
+ - package main
+   import (
+       "context"
+       "fmt"
+       "time"
+   )
+   
+   func main() {
+       ctx, cancel := context.WithDeadline(
+           context.Background(),
+           time.Now().Add(5*time.Second),
+       )
+       defer cancel()
+   
+       deadline, ok := ctx.Deadline()
+   
+       if ok {
+           fmt.Println("Deadline:", deadline)
+           fmt.Println("Current time:", time.Now())
+           fmt.Println("Time remaining:", time.Until(deadline))
+       } else {
+           fmt.Println("No deadline set")
+       }
+   }
+ - deadline default value if not present - 0001-01-01 00:00:00 +0000 UTC
+ - ok default value if not present - false
+ - This is used as an intial check to see if the operation can be completed within the deadline, if not block the operation.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ - Done() <-chan struct{}
+ - A method that returns a channel, A receive-only channel, An empty struct type, commonly used to signal an event without sending data
+ - select {
+     case <-ctx.Done():
+         return
+     default:
+         // Continue working
+   }
+ - cancel() releases <-ctx.Done()
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ - Err() tells you why the context was cancelled.
+ - It returns nil if the context has not been cancelled.
+ - Once cancellation occurs, it returns an error explaining the cancellation reason.
+ - context.Canceled -> The context was explicitly cancelled.
+    - Your handler finishes its work, but the caller cancels the context: context.Canceled.
+ - context.DeadlineExceeded -> The context's deadline or timeout expired.
+    - Your database operation takes longer than its permitted deadline: context.DeadlineExceeded, if the context deadline is what caused cancellation.
+ - When the context is cancelled, a worker can receive from ctx.Done(), inspect ctx.Err(), and return.
+ - However, there's a subtlety: if both ctx.Done() and jobs are ready, select can choose either one. 
+   If cancellation must prevent additional jobs from starting, add an appropriate cancellation check before starting each job. 
+   Also, if processJob blocks or takes a long time, it should receive the context and cooperate with cancellation.
+ - Go recommends errors.Is() for checking cancellation errors rather than relying on direct string comparisons or error messages.
+ - In Go, contexts form a parent-child tree. Cancellation propagates downward from a parent to its descendants. 
+   If a parent context is cancelled, its child contexts are cancelled as well, regardless of their own timeout durations.
+   However, cancellation does not propagate upward. If a child is cancelled explicitly or its timeout expires, the parent remains active.
+   This allows individual operations to have their own timeouts without terminating the entire request.
+
+
+
+
