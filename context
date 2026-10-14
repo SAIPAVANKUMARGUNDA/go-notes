@@ -68,7 +68,53 @@ context.Context
    If a parent context is cancelled, its child contexts are cancelled as well, regardless of their own timeout durations.
    However, cancellation does not propagate upward. If a child is cancelled explicitly or its timeout expires, the parent remains active.
    This allows individual operations to have their own timeouts without terminating the entire request.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ - In Go's context package, Value(key any) any is used to retrieve request-scoped data stored inside a context.
+ - Value(key any) any
+ - key any: The key used to retrieve a value. It can be any Go type, but you should use a custom key type to avoid collisions.
+ - any: The returned value can be of any type. You generally need a type assertion to retrieve the value in its expected type.
+ - If the key does not exist, Value() returns nil.
+ - ctx := context.WithValue(
+        context.Background(),
+        userIDKey,
+        101,
+    )
+  WithValue helps to add values to context, if you want more values then ctx.WithValue multiple times
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Context propagation:
+ - Context propagation means passing the same context down through the layers that participate in a request.
+Cancellation:
+ - Cancellation means signaling that an operation should stop before it finishes.
+ Common reasons include:
+   - The caller no longer needs the result.
+   - The HTTP request is canceled.
+   - A parent operation fails and its remaining work is unnecessary.
+   - The application is shutting down.
+   - A manually defined cancellation condition occurs.
+Deadlines:
+ - A deadline specifies an absolute time by which work should stop.
+ - deadline := time.Now().Add(5 * time.Second)
+   ctx, cancel := context.WithDeadline(
+       context.Background(),
+       deadline,
+   )
+   defer cancel()
+  deadline, ok := ctx.Deadline()
+  if ok {
+      fmt.Println("Must finish by:", deadline)
+  }
+Timeouts:
+ - A timeout limits how long an operation may take, measured from when the timeout context is created.
+ - ctx, cancel := context.WithTimeout(
+       context.Background(),
+       2*time.Second,
+   )
+   defer cancel()
 
-
-
-
+| Aspect | Deadline | Timeout |
+|---|---|---|
+| Meaning | Specifies an absolute end time | Specifies a duration |
+| Function | `context.WithDeadline()` | `context.WithTimeout()` |
+| Based on | A specific date and time | A duration from the current time |
+| Use case | When a common cutoff time already exists | When you want to limit how long an operation can take |
+| Example | Finish before 5:00 PM | Finish within 5 seconds |
