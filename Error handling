@@ -67,6 +67,7 @@ Recover:
 
     panic("something went wrong")
 }
+ - Can recover only a panic in the same goroutine.
  - recover() only works when called from a deferred function during panic unwinding.
  - recover prevents an unrecovered panic from terminating the Go process. In an HTTP server,
    we typically use recovery middleware so that a panic in one request is recovered, logged, and converted into an appropriate response,
