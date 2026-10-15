@@ -14,6 +14,16 @@ Error wrapping:
 Sentinel errors:
  - A sentinel error is a predefined error value.
  - var ErrNotFound = errors.New("not found")
+ - // Is: check for a sentinel error
+   if errors.Is(err, ErrNotFound) {
+       // Handle not found
+   }
+   
+   // As: extract a custom error type
+   var apiErr *APIError
+   if errors.As(err, &apiErr) {
+       fmt.Println(apiErr.StatusCode)
+   }
 
 errors.Is():
  - errors.Is is used to check whether an error or any error in its chain matches a target error
