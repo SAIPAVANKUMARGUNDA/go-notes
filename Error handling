@@ -4,6 +4,30 @@ Error
  - fmt.Errorf("user %d not found", id), for a formatting an error message
  - Do not ignore errors
 
+Custom Error Type:
+ - In Go (Golang), you can create a custom error type by defining a struct and implementing the built-in error interface.
+ - package main
+
+import (
+    "fmt"
+)
+
+type UserNotFoundError struct {
+    UserID string
+}
+
+func (e *UserNotFoundError) Error() string {
+    return fmt.Sprintf("user not found: %s", e.UserID)
+}
+
+func main() {
+    err := &UserNotFoundError{
+        UserID: "123",
+    }
+
+    fmt.Println(err)
+}
+
 Error wrapping:
  - fmt.Errorf("failed to get user: %w", err)
  - %v → format error → string
