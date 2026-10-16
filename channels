@@ -79,7 +79,7 @@ go func() {
  - A technique used as signal that certain work is done
 
 Deadlock
- - Deadlock because the send happens before a receiver exists.
+ - Deadlock because the send happens before a receiver exists or receive happens before sender exists.
 
 ch := make(chan int)
 ch <- 10
@@ -95,6 +95,13 @@ ch <- 2
 ch <- 3
 
  - Third send blocks because: there is no receiver and ccapacity is 2
+ - Mutex deadlock — double locking
+ - var mu sync.Mutex
+    mu.Lock()
+    mu.Lock() // Blocks forever
+    mu.Unlock()
+ - Circular waiting between goroutines
+ - Sending to or receiving from a nil channel blocks forever
 
 Backpressure: Learn in depth
 
