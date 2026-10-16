@@ -103,6 +103,57 @@ ch <- 3
  - Circular waiting between goroutines
  - Sending to or receiving from a nil channel blocks forever
 
+Goroutine Leaks in Go:
+ - A goroutine leak occurs when a goroutine is no longer useful but continues running or remains blocked because it cannot finish its work.
+ - Goroutine leak because a downstream operation ignores cancellation
+   - This is particularly important in backend services calling other APIs or databases.
+   - func handler(ctx context.Context) {
+        done := make(chan struct{})
+    
+        go func() {
+            callSlowService() // May block indefinitely.
+            close(done)
+        }()
+    
+        select {
+        case <-done:
+            return
+        case <-ctx.Done():
+            return
+        }
+    }
+  - func handler(ctx context.Context) {
+        result, err := callSlowServiceContext(ctx)
+        if err != nil {
+            return
+        }
+    
+        processResult(result)
+    }
+  - WebSocket connection leak when a client disconnects
+    - func handleConnection(conn *websocket.Conn) {
+          go func() {
+              for {
+                  _, _, err := conn.ReadMessage()
+                  if err != nil {
+                      return
+                  }
+              }
+          }()
+      
+          // Handler returns, but connection is never closed.
+      }
+    - func handleConnection(conn *websocket.Conn) {
+          defer conn.Close()
+      
+          for {
+              _, _, err := conn.ReadMessage()
+              if err != nil {
+                  return
+              }
+          }
+      }
+
 Backpressure: Learn in depth
 
 What is a channel?
