@@ -1,4 +1,4 @@
-A channel is a typed communication mechanism between goroutines.
+A channel is a typed communication mechanism used for synchronization between goroutines.
 
 ch := make(chan int)
 
@@ -68,15 +68,14 @@ default:
 }
  - default statement here ensures that it is non-blocking
 
-Program
+Program:
 done := make(chan struct{})
-
 go func() {
     doWork()
     close(done)
 }()
-
 <-done
+
  - A technique used as signal that certain work is done
 
 Deadlock
