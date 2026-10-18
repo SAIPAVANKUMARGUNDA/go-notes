@@ -9,4 +9,8 @@ Protocol Buffers (Protobuf)
     - It occupies less bandwidth than JSON
     - Fields have declared types and unique numeric identifiers.
  - create a .proto with req and response details and their types
- - 
+ - Protobuf Field Numbering:
+    - Field numbers identify fields: Protobuf sends the field number and value, not the field name, making the data smaller.
+    - Receiver identifies the field: The receiver uses the .proto file to map the field number to the correct field name and value.
+    - Never change or reuse field numbers: Once a number is assigned, keep it the same. Use a new number for new fields, and reserve numbers of deleted fields.
+      This will ensure backward compatibility, forward compatibility, and safe production schema evolution.
