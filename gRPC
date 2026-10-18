@@ -14,3 +14,19 @@ Protocol Buffers (Protobuf)
     - Receiver identifies the field: The receiver uses the .proto file to map the field number to the correct field name and value.
     - Never change or reuse field numbers: Once a number is assigned, keep it the same. Use a new number for new fields, and reserve numbers of deleted fields.
       This will ensure backward compatibility, forward compatibility, and safe production schema evolution.
+
+gRPC Framework
+ - gRPC is a framework that helps two applications communicate with each other efficiently, usually over a network.
+ - gRPC framework provides:
+   - gRPC tools generate Go code for you from proto files
+   - RPC stands for Remote Procedure Call. It lets one service call a function on another service over the network.
+   - Normally, a client sends a request and receives a response. Streaming allows multiple messages to flow through one RPC.
+   - Metadata is additional information sent along with an RPC request.
+     Examples: authentication tokens, request IDs, and tracing information.
+   - A deadline specifies the latest time by which an RPC should finish.
+     For example, if a payment request has a 2-second deadline, the caller can stop waiting after that deadline expires.
+   - gRPC provides standard codes to describe the outcome of an RPC.
+     Examples: OK, NotFound, Unauthenticated, DeadlineExceeded, and Unavailable. 
+   - Interceptors let you run common logic before or after RPC calls without repeating it in every handler.
+     Examples: logging, authentication, metrics, and tracing.
+   - gRPC handles the network communication between client and server, typically using HTTP/2.
