@@ -1,1 +1,16 @@
+Array:
+ - An array is a sequence of exactly N elements of the same type. Its length is part of its type.
+ - var a [3]int
+ - func update(a [3]int) {
+        a[0] = 100
+    }
+    
+    func main() {
+        a := [3]int{1, 2, 3}
+        update(a)
+        fmt.Println(a) // [1 2 3]
+    }
+ - In the above example, it is clear that arrays when passed to a function, copy of the array is received not the pointer
 
+Slice:
+ - 
