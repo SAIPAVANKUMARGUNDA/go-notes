@@ -1,0 +1,12 @@
+What is gRPC?
+ - gRPC is a remote procedure call (RPC) framework that allows one application to invoke a method exposed by another application, often across a network.
+
+Protocol Buffers (Protobuf)
+ - In gRPC, Protocol Buffers (protobuf) is the language-neutral system used to define API contracts, 
+   represent structured data, serialize that data into binary format, and generate code for client-server communication.
+ - Request -> protobuf serialization -> encoded binary format -> Protobuf deserialization -> Request
+ - Why use protobuf?
+    - It occupies less bandwidth than JSON
+    - Fields have declared types and unique numeric identifiers.
+ - create a .proto with req and response details and their types
+ - 
