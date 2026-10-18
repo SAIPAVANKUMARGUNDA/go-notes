@@ -13,4 +13,59 @@ Array:
  - In the above example, it is clear that arrays when passed to a function, copy of the array is received not the pointer
 
 Slice:
- - 
+ - A slice is a flexible, dynamically sized view of an underlying array.
+ - Slice has 3 elements:
+   - Pointer (Backing array)
+   - Length (current array length)
+   - Capacity (Elements available before growth)
+   - append() may reuse the existing backing array or allocate a new one. You must not assume which happens without considering capacity.
+
+Slice Memory Leak:
+ - A slice memory leak happens when a small slice keeps a large backing array in memory, even though you no longer need most of that array.
+ - package main
+   import "fmt"
+   
+   func getData() []int {
+       largeArray := make([]int, 1_000_000)
+   
+       // Return only 10 elements
+       smallSlice := largeArray[:10]
+   
+       return smallSlice
+   }
+   
+   func main() {
+       s := getData()
+       fmt.Println(len(s)) // 10
+   }
+- In the above example, the large backing array is still alive, to solve this we need to copy the element
+- func getData() []int {
+    largeArray := make([]int, 1_000_000)
+
+    smallSlice := make([]int, 10)
+    copy(smallSlice, largeArray[:10])
+
+    return smallSlice
+}
+- | Behavior | Nil slice | Empty, non-nil slice |
+  | Declaration | `var s []int` | `s := []int{}` |
+  | Length (`len`) | `0` | `0` |
+  | Capacity (`cap`) | `0` | `0` |
+  | `s == nil` | `true` | `false` |
+  | `append` | Works | Works |
+  | JSON encoding (`encoding/json`) | `null` | `[]` |
+
+Map:
+ - key value pair with loopup, insertion and deletion with O(1) guarantee.
+ - A regular Go map is not safe for concurrent read/write or write/write access without synchronization.
+ - m := make(map[string]int)
+
+   go func() {
+       m["apple"] = 1
+   }()
+   
+   go func() {
+       m["banana"] = 2
+   }()
+ - Protect the map with sync.RWMutex or use sync.Map
+
