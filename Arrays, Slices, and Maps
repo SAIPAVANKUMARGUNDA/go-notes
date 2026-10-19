@@ -1,6 +1,9 @@
 Array:
  - An array is a sequence of exactly N elements of the same type. Its length is part of its type.
- - var a [3]int
+ - var a [3]int = [3]int{1,2,3}
+ - var a = [3]int{1,2,3}
+ - a := [3]int{1,2,3}
+ - loop an array
  - func update(a [3]int) {
         a[0] = 100
     }
@@ -19,6 +22,7 @@ Slice:
    - Length (current array length)
    - Capacity (Elements available before growth)
    - append() may reuse the existing backing array or allocate a new one. You must not assume which happens without considering capacity.
+   - new capacity is given to the slice when the existing capacity is exhausted, that capacity depends on go verison and circumstances
 
 Slice Memory Leak:
  - A slice memory leak happens when a small slice keeps a large backing array in memory, even though you no longer need most of that array.
