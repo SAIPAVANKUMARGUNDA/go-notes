@@ -1,4 +1,5 @@
-A channel is a typed communication mechanism used for synchronization between goroutines.
+Channels
+- A channel is a typed communication mechanism used for synchronization between goroutines.
 
 ch := make(chan int)
 
@@ -47,8 +48,9 @@ Nil Channel
  - nil channel blocks forever while sending to it or receiving from it
  - select disables nil channel condition
  - panic happens when we try to close a nil channel
+----------------------------------------------------------------------------------------------------------------------
 
-Select
+Select:
 select {
 case value := <-ch1:
     fmt.Println(value)
@@ -77,7 +79,7 @@ go func() {
 <-done
 
  - A technique used as signal that certain work is done
-
+----------------------------------------------------------------------------------------------------------------------
 Deadlock
  - Deadlock because the send happens before a receiver exists or receive happens before sender exists.
 
@@ -102,7 +104,7 @@ ch <- 3
     mu.Unlock()
  - Circular waiting between goroutines
  - Sending to or receiving from a nil channel blocks forever
-
+----------------------------------------------------------------------------------------------------------------------
 Goroutine Leaks in Go:
  - A goroutine leak occurs when a goroutine is no longer useful but continues running or remains blocked because it cannot finish its work.
  - Goroutine leak because a downstream operation ignores cancellation
@@ -153,7 +155,7 @@ Goroutine Leaks in Go:
               }
           }
       }
-
+----------------------------------------------------------------------------------------------------------------------
 Backpressure: Learn in depth
 
 What is a channel?
