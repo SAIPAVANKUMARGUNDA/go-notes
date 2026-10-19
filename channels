@@ -156,6 +156,10 @@ Goroutine Leaks in Go:
           }
       }
 ----------------------------------------------------------------------------------------------------------------------
+Race Conditions in Go:
+ - A race condition occurs when multiple goroutines access and modify shared data concurrently, 
+   and the final result depends on the unpredictable order in which they execute.
+
 Backpressure: Learn in depth
 
 What is a channel?
