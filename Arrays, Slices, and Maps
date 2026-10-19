@@ -61,7 +61,14 @@ Slice Memory Leak:
 
 Map:
  - key value pair with lookup, insertion and deletion with O(1) guarantee.
- - A regular Go map is not safe for concurrent read/write or write/write access without synchronization.
+ - var m map[string]int -> nil map
+ - var m map[string]int = map[string]int{} -> Empty map
+ - m := map[string]int{} -> Empty map
+ - m := make(map[string]int)
+ - loop over map
+ - delete(map variable, key)
+ - len(map variable) to get length of the map
+ - A regular Go map is not safe(gives runtime panic) for concurrent read/write or write/write access without synchronization.
  - m := make(map[string]int)
 
    go func() {
