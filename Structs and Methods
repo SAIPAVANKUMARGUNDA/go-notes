@@ -1,3 +1,79 @@
+Struct:
+ - A struct is a user-defined data type that groups related fields, potentially of different types, into a single unit.
+ - type Employee struct {
+     	Name string
+     	Age  int
+   }
+ - zero value initialization - var e3 Employee
+
+Struct embedding:
+ - Struct embedding allows you to include a type inside another struct without explicitly specifying a field name
+ - package main
+   import "fmt"
+   
+   type Address struct {
+       City    string
+       Country string
+   }
+   
+   type User struct {
+       Name string
+       Address // Embedded struct
+   }
+   
+   func main() {
+       u := User{
+           Name: "Rahul",
+           Address: Address{
+               City:    "Hyderabad",
+               Country: "India",
+           },
+       }
+   
+       fmt.Println(u.Name)
+       fmt.Println(u.City)
+       fmt.Println(u.Address.City)
+   }
+
+Embedding methods:
+ - An embedded type's methods can also be promoted to the outer type.
+ - type Logger struct{}
+    func (Logger) Log(msg string) {
+        fmt.Println("LOG:", msg)
+    }
+    
+    type Service struct {
+        Logger
+    }
+    
+    func main() {
+        s := Service{}
+        s.Log("request received")
+    }
+
+Method Sets:
+ - A method set is the set of methods associated with a type for the purpose of method selection and interface implementation.
+ - type User struct{}
+   
+   func (User) Name() string {
+       return "Rahul"
+   }
+   
+   func (*User) Update() {
+       fmt.Println("updated")
+   }
+ - Pointer receiver receives both value and pointer while value receiver rejects pointer
+
+- Embedding promotes fields and methods; it does not create a subtype relationship.
+- The embedded field can still be accessed explicitly, such as s.Logger.
+- If the outer type defines a method with the same name as a promoted method, the outer method takes precedence for that selector.
+- If multiple embedded fields create an ambiguous selector, you must qualify the field explicitly.
+- Struct A and Struct B, A has B and both A and B implements C, then a.C is seperate from b.C
+- Struct A and Struct B, A has named B and both B implements C, then a.b.C and b.C works
+- If A implements method C() and A contains B, but B does not implement C(), then:
+  - a.C() works.
+  - b.C() gives a compile-time error.
+
 Pointer receivers vs Value receivers
  - In Go, methods can have either value receivers or pointer receivers.
 
