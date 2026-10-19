@@ -159,6 +159,82 @@ Goroutine Leaks in Go:
 Race Conditions in Go:
  - A race condition occurs when multiple goroutines access and modify shared data concurrently, 
    and the final result depends on the unpredictable order in which they execute.
+ - package main
+
+    import (
+        "fmt"
+        "sync"
+    )
+    
+    func main() {
+        count := 0
+        var wg sync.WaitGroup
+    
+        for i := 0; i < 1000; i++ {
+            wg.Add(1)
+    
+            go func() {
+                defer wg.Done()
+                count++
+            }()
+        }
+    
+        wg.Wait()
+        fmt.Println(count)
+    }
+ - This can be solved using mutex locks or atomic operations, Below is an example
+ - package main
+
+    import (
+        "fmt"
+        "sync"
+    )
+    
+    func main() {
+        count := 0
+        var mu sync.Mutex
+        var wg sync.WaitGroup
+    
+        for i := 0; i < 1000; i++ {
+            wg.Add(1)
+    
+            go func() {
+                defer wg.Done()
+    
+                mu.Lock()
+                count++
+                mu.Unlock()
+            }()
+        }
+    
+        wg.Wait()
+        fmt.Println(count) // 1000
+    }
+- package main
+
+  import (
+      "fmt"
+      "sync"
+      "sync/atomic"
+  )
+  
+  func main() {
+      var count atomic.Int64
+      var wg sync.WaitGroup
+  
+      for i := 0; i < 1000; i++ {
+          wg.Add(1)
+  
+          go func() {
+              defer wg.Done()
+              count.Add(1)
+          }()
+      }
+  
+      wg.Wait()
+      fmt.Println(count.Load()) // 1000
+  }
+ - To detect race consition in go: go run -race main.go
 
 Backpressure: Learn in depth
 
