@@ -60,7 +60,7 @@ Slice Memory Leak:
   | JSON encoding (`encoding/json`) | `null` | `[]` |
 
 Map:
- - key value pair with loopup, insertion and deletion with O(1) guarantee.
+ - key value pair with lookup, insertion and deletion with O(1) guarantee.
  - A regular Go map is not safe for concurrent read/write or write/write access without synchronization.
  - m := make(map[string]int)
 
