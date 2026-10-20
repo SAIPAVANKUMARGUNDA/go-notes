@@ -235,8 +235,17 @@ Race Conditions in Go:
       fmt.Println(count.Load()) // 1000
   }
  - To detect race consition in go: go run -race main.go
-
-Backpressure: Learn in depth
+----------------------------------------------------------------------------------------------------------------------
+WaitGroups in Go:
+ - A sync.WaitGroup is used to wait for multiple goroutines to finish their execution before the main goroutine continues.
+ - WaitGroup has 3 methods:
+    - Add(n) -> Increments the counter by n, maintains the count og no of unfinished goroutines
+    - Done() -> Decrements the counter, used when a go rotuine is finished
+    - Wait() -> blocks main go routine untill counter is zero
+ - What happens if we call Done() more times than Add()?
+    - This causes runtime panic
+ - Add() should be added before go routine starts
+----------------------------------------------------------------------------------------------------------------------
 
 What is a channel?
 Buffered vs unbuffered channel?
